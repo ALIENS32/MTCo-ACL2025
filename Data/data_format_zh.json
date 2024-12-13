@@ -1,0 +1,35 @@
+[
+    {
+        "main_id":"<int:对话编号>",
+        "subject":"<str:对话内容的主题，如文学、地理等",
+        "scenario":"<str:三种场景中的一种>",
+        "conv":[
+            {
+                "turn_id":"<int:轮次编号>",
+                "task_types": "<str:任务类型>",
+                "instruction":"<str:用户给出的提示词>",
+                "constraint_dimensions":[
+                    "<str:限制类型1>",
+                    "<str:限制类型2>"
+                ],
+                "relation":"<str:与上一轮对话的关系，如follow-up>",
+                "scoring_questions":[
+                    {
+                        "point_id": "<int:打分问题编号",
+                        "question": "<str:提示评估大模型进行打分的问题>",
+                        "rule": "<str:是否启用基于规则的评估方法>",
+                        "constraint_dimension": [
+                            "<str:包含的限制>"
+                        ]
+                    },
+                    {
+
+                    }
+                ]
+            },
+            {
+
+            }
+        ]
+    }
+]

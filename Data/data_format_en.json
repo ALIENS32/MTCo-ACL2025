@@ -1,0 +1,35 @@
+[
+    {
+        "main_id": "<int: Conversation ID>",
+        "subject": "<str: The theme of the conversation content, such as literature, geography, etc.>",
+        "scenario": "<str: One of the three scenarios>",
+        "conv": [
+            {
+                "turn_id": "<int: Turn ID>",
+                "task_types": "<str: Type of task>",
+                "instruction": "<str: Prompt given by the user>",
+                "constraint_dimensions": [
+                    "<str: Constraint type 1>",
+                    "<str: Constraint type 2>"
+                ],
+                "relation": "<str: Relationship with the previous round of dialogue, such as follow-up>",
+                "scoring_questions": [
+                    {
+                        "point_id": "<int: Scoring question ID>",
+                        "question": "<str: A question to prompt the evaluation of the large model for scoring>",
+                        "rule": "<str: Whether to enable rule-based evaluation method>",
+                        "constraint_dimension": [
+                            "<str: Included constraints>"
+                        ]
+                    },
+                    {
+
+                    }
+                ]
+            },
+            {
+
+            }
+        ]
+    }
+]
