@@ -17,40 +17,40 @@ The output should contain two parts: multi-turn dialogue data and structure, in 
 The prompt data within the multi-turn dialogue must be output in the following format:
 ```
 [
-? ? {
-? ? ? ? "conv":[
-? ? ? ? ? ? {
-? ? ? ? ? ? ? ? "turn_id":"<int: turn number>",
-? ? ? ? ? ? ? ? "task_types": "<str: task type>",
-? ? ? ? ? ? ? ? "instruction":"<str: user-given prompt>",
-? ? ? ? ? ? ? ? "constraint_dimensions":[
-? ? ? ? ? ? ? ? ? ? "<str: constraint type 1>",
-? ? ? ? ? ? ? ? ? ? "<str: constraint type 2>"
-? ? ? ? ? ? ? ? ],
-? ? ? ? ? ? ? ? "relation":"<str: relationship with the previous dialogue, such as follow-up>",
-? ? ? ? ? ? ? ? ]
-? ? ? ? ? ? },
-? ? ? ? ? ? {
+    {
+        "conv":[
+            {
+                "turn_id":"<int: turn number>",
+                "task_types": "<str: task type>",
+                "instruction":"<str: user-given prompt>",
+                "constraint_dimensions":[
+                    "<str: constraint type 1>",
+                    "<str: constraint type 2>"
+                ],
+                "relation":"<str: relationship with the previous dialogue, such as follow-up>",
+                ]
+            },
+            {
 
-? ? ? ? ? ? }
-? ? ? ? ]
-? ? }
+            }
+        ]
+    }
 ]
 ```
 Please use code to describe the structure of the multi-turn dialogue data you have designed, similar to the example given in the previous conversation:
 ```
 class Node:
-? ? def __init__(self, name):
-? ? ? ? self.name = name
-? ? ? ? self.edges = []
+    def __init__(self, name):
+        self.name = name
+        self.edges = []
 
-? ? def add_follow_up(self, target):
-? ? ? ? # Add a follow-up relationship, represented by a solid line
-? ? ? ? edge = Edge(self, target, 'solid')
-? ? ? ? self.edges.append(edge)
+    def add_follow_up(self, target):
+        # Add a follow-up relationship, represented by a solid line
+        edge = Edge(self, target, 'solid')
+        self.edges.append(edge)
 
-? ? def add_refinement(self, target):
-? ? ? ? # Add a refinement relationship, represented by a dashed line
-? ? ? ? edge = Edge(self, target, 'dashed')
-? ? ? ? self.edges.append(edge)
+    def add_refinement(self, target):
+        # Add a refinement relationship, represented by a dashed line
+        edge = Edge(self, target, 'dashed')
+        self.edges.append(edge)
 ```
