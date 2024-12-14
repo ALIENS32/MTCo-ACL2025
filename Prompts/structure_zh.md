@@ -1,10 +1,17 @@
-我们计划评估大型语言模型在多轮对话中遵循指令的能力。为此，我们设计了三种复杂场景，并希望通过建立多轮对话结构模板来指导创建评估数据集。这将有助于测试模型是否能够根据用户的提示正确地进行对话延续、澄清、回忆、扩展以及总结。
+请你理解以下内容，在后续的对话中，我们会让你根据以下内容使用代码描述对话结构
+### 背景
+我们计划评估大型语言模型在多轮对话中遵循指令的能力。为此，我们设计了三种复杂场景，并希望通过建立多轮对话结构模板来指导创建评估数据集，我们设计的对话结构中包含五种基本结构：follow-up、refinement、recollection、expansion、summary，希望基于这五种基本结构描述复杂场景下的对话结构
 
-以下是用Python代码表示的人与大模型之间的多轮对话结构。每个`Node`类的实例代表一轮对话，包括一个提问和一段来自大模型的回答。节点名中的数字（如`k1`）表示该轮对话在整个对话序列中的位置。
+### 使用代码描述对话结构
+我们使用下列python代码描述上述五种基本对话结构
 
-两轮对话之间存在两种关系类型：
+每个`Node`类的实例代表一轮对话，包括一个提问和一段来自大模型的回答。节点名中的数字（如`k1`实例代表第一轮对话）表示该轮对话在整个对话序列中的位置。
+
+两轮对话之间只存在两种关系类型：
 - **跟进（follow-up）**：用户基于上一轮对话中大模型的回答提出新的问题或评论。这种关系通过实线边表示。
 - **澄清（refinement）**：用户修改或澄清之前的提示，可能是因为需要更正信息或表达得更清楚。这种关系通过虚线边表示。
+
+再次强调，在多轮对话结构中不同轮次对话之间只存在两种关系：跟进与澄清！
 
 ```python
 class Node:
@@ -12,15 +19,11 @@ class Node:
         self.name = name
         self.edges = []
 
-    def add_follow_up(self, target):
-        # 添加跟进关系，使用实线表示
-        edge = Edge(self, target, 'solid')
-        self.edges.append(edge)
+    def add_follow_up(self, target): # slef和target之间存在follow-up关系
+        pass
 
-    def add_refinement(self, target):
-        # 添加澄清关系，使用虚线表示
-        edge = Edge(self, target, 'dashed')
-        self.edges.append(edge)
+    def add_refinement(self, target): # slef和target之间存在refinement关系
+        pass
 
 # 示例：跟进关系
 node_k0 = Node('k0')  # 初始对话
