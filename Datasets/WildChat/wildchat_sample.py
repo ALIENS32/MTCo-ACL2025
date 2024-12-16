@@ -22,7 +22,7 @@ sample_count = 0
 
 # 定义一个函数来检查单个样本是否符合条件
 def is_eligible(item):
-    return item['turn'] > 8 and item['turn'] <16 and item['language'] == 'English'
+    return item['turn'] > 3 and item['turn'] <10 and item['language'] == 'English'
 
 # 定义一个函数来处理单个样本
 def process_item(item):
