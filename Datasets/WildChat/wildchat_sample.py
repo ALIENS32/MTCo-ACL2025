@@ -22,7 +22,7 @@ sample_count = 0
 
 # 定义一个函数来检查单个样本是否符合条件
 def is_eligible(item):
-    return item['turn'] > 8 and item['language'] == 'English'
+    return item['turn'] > 8 and item['turn'] <16 and item['language'] == 'English'
 
 # 定义一个函数来处理单个样本
 def process_item(item):
@@ -66,7 +66,7 @@ with ThreadPoolExecutor(max_workers=8) as executor:
             sample_count += 1
 
 # 将过滤后的数据写入JSON文件
-with open("wild_filtered_data.json", "w", encoding="utf-8") as f:
+with open("Datasets\WildChat\wild_filtered_data.json", "w", encoding="utf-8") as f:
     json.dump(filtered_data, f, indent=4, ensure_ascii=False)
 
 print(f"Finished processing. Total {sample_count} samples have been saved to wild_filtered_data.json.")
