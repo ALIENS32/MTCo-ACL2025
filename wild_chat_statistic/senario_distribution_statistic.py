@@ -1,51 +1,87 @@
-'''
-统计四种场景的分布
-'''
+"""
+Count the distribution of four types of scenarios in the conversation data.
+"""
+
 from openai import OpenAI
 import json
 
-key = 'your key'
-sampled_data_path = 'wild_chat_statistic\wild_sampled_data.json'
-prompt_path = "wild_chat_statistic\senario_distribution_statistic_prompt_template_en.md"
+# Initialize API key and file paths
+API_KEY = 'your key'
+SAMPLED_DATA_PATH = 'wild_chat_statistic\\wild_sampled_data.json'
+PROMPT_TEMPLATE_PATH = "wild_chat_statistic\\senario_distribution_statistic_prompt_template_en.md"
 
+# Create an instance of the OpenAI client with a custom base URL and the API key
 client = OpenAI(
-    base_url="https://api2.aigcbest.top/v1",
-    api_key=key
+    base_url="https://api2.aigcbest.top/v1",  # Custom base URL for the API
+    api_key=API_KEY  # The API key for authentication
 )
 
-# 获得提示模板
-with open(prompt_path, 'r', encoding='utf-8') as file:
-    prompt_template = file.read()
+# Load the prompt template from the specified file
+with open(PROMPT_TEMPLATE_PATH, 'r', encoding='utf-8') as file:
+    prompt_template = file.read()  # Read the prompt template as a string
 
-# 遍历json数据
-with open(sampled_data_path, 'r', encoding='utf-8') as file:
-    sampled_data = json.load(file)
+# Load the sampled conversation data from the JSON file
+with open(SAMPLED_DATA_PATH, 'r', encoding='utf-8') as file:
+    sampled_data = json.load(file)  # Parse the JSON data into a Python object
 
-classify_result_list=[]
-for idx in range(0,len(sampled_data)):
-    prompt = prompt_template.replace(
-        'specific_dialogue', str(sampled_data[idx]['conversation']))
+# Initialize counters for each scenario type
+classify_result_list = []
+purposeless_dialogue_num = 0
+clear_purpose_dialogue_num = 0
+unclear_purpose_dialogue_num = 0
+hybrid_purpose_dialogue_num = 0
+
+# Iterate over each conversation in the sampled data
+for idx in range(len(sampled_data)):
+    # Prepare the prompt by replacing the placeholder with the current conversation
+    prompt = prompt_template.replace('specific_dialogue', str(sampled_data[idx]['conversation']))
+    
+    # Send the prompt to the OpenAI API and get a response
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o",  # Specify the model to use for generating the response
         messages=[
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": prompt},  # The user message contains the prompt
         ]
     )
-    senario_json=response.choices[0].message.content
-    print(senario_json)
-    senario_dict = json.loads(senario_json[7:-3])#去掉前面的```JSON和结尾的```
-    classify_result={
-         "index":idx+1,
-         "senario":senario_dict['senario']
+    
+    # Extract the scenario JSON string from the response content
+    senario_json = response.choices[0].message.content  # The response content is nested deeply
+    senario_dict = json.loads(senario_json[7:-3])  # Remove leading '```JSON' and trailing '```'
+    
+    # Prepare the classification result for the current conversation
+    classify_result = {
+        "index": idx + 1,  # Index of the conversation in the dataset
+        "senario": senario_dict['senario']  # The classified scenario from the response
     }
+
+    # Count the number of conversations for each scenario type
+    if senario_dict['senario']['name'] == "Purposeless Dialogue":
+        purposeless_dialogue_num += 1
+    elif senario_dict['senario']['name'] == "Clear Purpose Dialogue":
+        clear_purpose_dialogue_num += 1
+    elif senario_dict['senario']['name'] == "Unclear Purpose":
+        unclear_purpose_dialogue_num += 1
+    elif senario_dict['senario']['name'] == "Hybrid Purpose":
+        hybrid_purpose_dialogue_num += 1
+
+    # Add the classification result to the list
     classify_result_list.append(classify_result)
-    break
+    
+    # For debugging purposes, limit the number of processed items (can be removed for full processing)
+    if idx == 2:
+        break
 
-output_file_path='wild_chat_statistic\wild_senarion_classify_result.json'
-with open(output_file_path, "w", encoding="utf-8") as f:
-        json.dump(classify_result_list, f, ensure_ascii=False, indent=2)
+# Insert the summary of scenario counts at the beginning of the results list
+classify_result_list.insert(0, {
+    "Purposeless Dialogue Num": purposeless_dialogue_num,
+    "Clear Purpose Dialogue Num": clear_purpose_dialogue_num,
+    "Unclear Purpose Num": unclear_purpose_dialogue_num,
+    "Hybrid Purpose Num": hybrid_purpose_dialogue_num
+})
 
-# ChatCompletion(id='chatcmpl-AhZcjBya7xKZWJGib01xmuLxlvoBt', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='```json\n{\n    "senario": "Clear Purpose Dialogue",\n    "probability": {\n        "Purposeless Dialogue": 0,\n        "Clear Purpose Dialogue": 1,\n        "Unclear Purpose": 0,\n        "Hybrid Purpose": 0\n    },\n    "rationale": "The dialogue demonstrates a clear purpose as the user is systematically inquiring about various aspects of Hurricane Florence and hurricanes in general. The user\'s questions follow a logical sequence aimed at gathering comprehensive information about Hurricane Florence\'s characteristics, behavior, and impact. The user begins with questions about how Hurricane Florence lost its strength, explores its size, pressure, stalling behavior, and concludes by asking about the basic characteristics of hurricanes. This structured approach indicates that the user has a clear overall goal to understand the hurricane in detail, making this a \'Clear Purpose Dialogue\'. The dialogue does not exhibit frequent topic shifts or exploration of multiple possibilities without a fixed path, which rules out it being classified as \'Purposeless Dialogue\', \'Unclear Purpose\', or \'Hybrid Purpose\'."\n}\n```',
-#                refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None))], created=1734948405, model='gpt-4o-2024-08-06', object='chat.completion', service_tier=None, system_fingerprint='fp_d28bcae782', usage=CompletionUsage(completion_tokens=217, prompt_tokens=2081, total_tokens=2298, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=0, audio_tokens=0, reasoning_tokens=0, rejected_prediction_tokens=0), prompt_tokens_details=PromptTokensDetails(audio_tokens=0, cached_tokens=0)))
+# Define the path where the output JSON file will be saved
+OUTPUT_FILE_PATH = 'wild_chat_statistic\\wild_senarion_classify_result.json'
 
-
+# Write the classification results to a JSON file
+with open(OUTPUT_FILE_PATH, "w", encoding="utf-8") as f:
+    json.dump(classify_result_list, f, ensure_ascii=False, indent=2)  # Save the results with proper formatting

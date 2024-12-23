@@ -13,7 +13,7 @@ sampled_output_file_path = "wild_chat_statistic/wild_sampled_data.json"
 
 def filt_and_save(filt_output_file_path):
     """
-    Filters the WildChat-1M dataset for conversations that are in English, have between 4 and 7 turns,
+    Filters the WildChat-1M dataset for conversations that are in English, have between 3 and 8 turns,
     and contain a 'conversation' field. It then saves these filtered conversations to a JSON file.
 
     Parameters:
