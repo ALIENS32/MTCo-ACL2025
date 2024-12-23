@@ -25,17 +25,14 @@
 ## Output Format
 ```json
 {
-    "senario":
-    {
-        "name":"<str: Classification Scenario Name>",
-        "probability": {
-            "Purposeless Dialogue": "<int: Classification Probability Value>",
-            "Clear Purpose Dialogue": "<int: Classification Probability Value>",
-            "Unclear Purpose": "<int: Classification Probability Value>",
-            "Hybrid Purpose": "<int: Classification Probability Value>"
-        },
-        "rationale": "<str: Rationale for classifying the current dialogue into this scenario>"
-    }
+    "senario": "<str: Classification Scenario Name>",
+    "probability": {
+        "Purposeless Dialogue": "<int: Classification Probability Value>",
+        "Clear Purpose Dialogue": "<int: Classification Probability Value>",
+        "Unclear Purpose": "<int: Classification Probability Value>",
+        "Hybrid Purpose": "<int: Classification Probability Value>"
+    },
+    "rationale": "<str: Rationale for classifying the current dialogue into this scenario>"
 }
 ```
 
