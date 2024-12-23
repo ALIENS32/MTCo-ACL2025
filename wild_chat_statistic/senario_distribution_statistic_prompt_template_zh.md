@@ -5,14 +5,17 @@
 ## 输出格式
 ```json
 {
-    "senario":"<str：分类场景名>",
-    "probability":{
-        "Purposeless Dialogue":"<int：分类概率值>",
-        "Clear Purpose Dialogue":"<int：分类概率值>",
-        "Unclear Purpose":"<int：分类概率值>",
-        "Hybrid Purpose":"<int：分类概率值>",
-    },
-    "rationale":"<str：将当前对话分类为该场景的依据>"
+    "senario":
+    {
+        "name":"<str：分类场景名>",
+        "probability":{
+            "Purposeless Dialogue":"<int：分类概率值>",
+            "Clear Purpose Dialogue":"<int：分类概率值>",
+            "Unclear Purpose":"<int：分类概率值>",
+            "Hybrid Purpose":"<int：分类概率值>",
+        },
+        "rationale":"<str：将当前对话分类为该场景的依据>"
+    }
 }
 ```
 
